@@ -56,3 +56,6 @@ secrets.json
 
 # Миграции (если не нужно коммитить)
 migrations/
+
+results
+.DS_Store
