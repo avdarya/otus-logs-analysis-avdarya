@@ -62,7 +62,7 @@ def print_report(file, top_count, total_requests,  method_counts, top_ips, top_d
     print('Отчет завершен')
     print('=' * 60)
 
-def parse_log():
+def get_cli_parser():
     cli_parser = argparse.ArgumentParser(description='Парсер логов')
     cli_parser.add_argument(
         '-p',
@@ -78,12 +78,9 @@ def parse_log():
         required=True,
         help='Количество топ-записей в отчете'
     )
-    args = cli_parser.parse_args()
-    path = args.path
-    top_count = args.top_count
-    files = get_files(path)
+    return cli_parser
 
-    for file in files:
+def process_file(file, top_count):
         total_requests = 0
         method_counts = Counter()
         ip_counts = Counter()
@@ -110,6 +107,15 @@ def parse_log():
 
         generate_report(file, top_ips, top_durations, method_counts, total_requests)
         print_report(file, top_count, total_requests,  method_counts, top_ips, top_durations)
+
+def parse_log():
+    cli_parser = get_cli_parser()
+    args = cli_parser.parse_args()
+    path = args.path
+    top_count = args.top_count
+    files = get_files(path)
+    for file in files:
+        process_file(file, top_count)
 
 if __name__ == '__main__':
     parse_log()
